@@ -11,6 +11,9 @@ Long ago he provided a big zip ball of stuff.  I am trying to go through that to
 
 Do this from the directory that holds the Rstudio project:
 ```r
+# get the repo:
+git clone https://github.com/eriqande/wiwa-scatr
+
 # first do a very short run of the MCMC
 library(sp)
 source("R-main/main_WIWA.R")
