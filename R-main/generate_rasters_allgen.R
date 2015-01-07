@@ -4,12 +4,8 @@ library(ROCR)
 library(stringr)
 library(sp)
 
-sps = c("HETH","WIWA")
-suffs = c("_cv","_cv_loc")
-nChains = 4
-
 sps = c("WIWA")
-suffs = c("_1deg_cv_rand_loc")
+suffs = c("")
 nChains = 2
 
 
@@ -41,11 +37,13 @@ for(sp in sps)
 
         bound = read_boundary_file(boundary_file)*180/pi
         bound = SpatialPolygons(list(Polygons(list(Polygon(bound,hole=FALSE)),ID="boundary")))
-        bound = rasterize(r, bound)
+        bound = rasterize(bound,r)
 
         gen_all = list()
         for(c in 1:nChains)
             gen_all[[c]] = list()
+
+        pb = txtProgressBar(max = nind, style = 3)
 
         for(ind in 1:nind)
         {
@@ -56,8 +54,9 @@ for(sp in sps)
 
             }
 
-            cat(ind,'\n')
+            setTxtProgressBar(pb, ind)
         }
+        close(pb)
 
         save(gen_all,file=file.path(root,"gen_all_res.Rdata"))
     }
