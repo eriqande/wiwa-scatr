@@ -1,22 +1,26 @@
 # setwd("/Users/eriq/Documents/work/assist/kristenruegg/scatR_with_colin/Analysis-Kristen")
-if(!file.exists("/tmp/scratch2")) dir.create("/tmp/scratch2")
+
 root_dir = path.expand("/tmp/scratch2") #"Scratch/"
+
+if(!file.exists(root_dir)) 
+    dir.create(root_dir, recursive=TRUE, showWarnings=FALSE)
+
 sp = "WIWA"
-suff = "_1deg_cv_rand_loc"
+suff = ""
 
 options = list( #TMPDIR = file.path(root_dir, paste(sp,suff,"/",sep="")),
-								TMPDIR = file.path(root_dir, paste(sp,suff,sep="")),
+				TMPDIR = file.path(root_dir, paste(sp,suff,sep="")),
                 RETURNFIT = FALSE,
                 LOCATE = TRUE,
                 USEMATERN = FALSE,
                 VERBOSE = FALSE,
-                
+
                 NULLPROB = 0.01,
                 DELTA = 0.05,
-                
+
                 MAXCELL = 3000, #1 deg
                 #MAXCELL = 2000,  #2 deg
-                
+
                 ALPHAMIN = c(0,1,0.01,0),
                 ALPHAMAX = c(10,20000,2,10),
 
@@ -28,7 +32,7 @@ options = list( #TMPDIR = file.path(root_dir, paste(sp,suff,"/",sep="")),
                 BETARANGE = c(0.01,25),
 
                 PERMUTE = TRUE,
-                
+
                 OUTPUTALFREQ = FALSE,
                 GZIPOUTPUT = FALSE
             )
