@@ -22,8 +22,6 @@ source("R-main/main_WIWA.R")
 # might be a step toward graphically summarizing the results.
 source("R-main/generate_rasters_allgen.R")
 Loading required package: gplots
-KernSmooth 2.23 loaded
-Copyright M. P. Wand 1997-2009
 
 Attaching package: ‘gplots’
 
@@ -32,23 +30,22 @@ The following object is masked from ‘package:stats’:
     lowess
 
 /tmp/scratch2/WIWA_1deg_cv_rand_loc 
-Error: could not find function "mask_precip_with_boundary"
-In addition: Warning messages:
-1: package ‘raster’ was built under R version 3.1.1 
-2: package ‘gplots’ was built under R version 3.1.2 
+Error in (function (classes, fdef, mtable)  : 
+  unable to find an inherited method for function ‘rasterize’ for signature ‘"RasterLayer", "SpatialPolygons"’
+> sessionInfo()
+R version 3.1.2 (2014-10-31)
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ```
 
-So, that fails, and I can't find any definition of a `mask_precip_with_boundary()` function
-anywhere (not even in old revisions of the package).
+So, that fails, and it seems to be something within the raster package probably not finding
+a method to dispatch on the signature as listed above.
 
 
-
-Issues:
-
-1. It appears that it needs the `sp` package which does not actually get loaded.
-    ```r
-    > source("R-main/main.R")
-    Error in adjust_boundary(bound, locs) : 
-    could not find function "SpatialPolygons"
-    ```
-2. There is no definition of `mask_precip_with_boundary` 
