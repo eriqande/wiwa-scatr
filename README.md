@@ -6,46 +6,73 @@ This documents my attempts to get colin rundels isoscatR package to work.
 Starting off I am going to to just see how it runs on the old microsat WIWA data of yore that
 he ran.
 
-Long ago he provided a big zip ball of stuff.  I am trying to go through that to figure out what he did:
+Long ago he provided a big zip ball of stuff.  I am trying to go through that to figure out what he did.
+
+He has provided a couple of fixes for previous issues, and now it seems that we can get things
+working somewhat. But now we have run into another problem.
+
+Here is a bit of a transcript.
 
 
 Do this from the directory that holds the Rstudio project:
 ```r
-# get the repo:
+# get the latest scatR
+# From within R do this:
+devtools::install_github("rundel/isoscatR")
+
+# get the wiwa-scatr repo:
 git clone https://github.com/eriqande/wiwa-scatr
 
-# first do a very short run of the MCMC
-library(sp)
+# change the run length so it isn't too short!
+#(here are the chnages I made)
+2015-01-13 12:37 /wiwa-scatr/--% git diff
+diff --git a/R-main/main_WIWA.R b/R-main/main_WIWA.R
+index c5907a1..8b9a2d1 100644
+--- a/R-main/main_WIWA.R
++++ b/R-main/main_WIWA.R
+@@ -37,9 +37,9 @@ options = list( #TMPDIR = file.path(root_dir, paste(sp,suff,"/
+                 GZIPOUTPUT = FALSE
+             )
+ 
+-nBurn = 10 #1000
+-nIter = 10 #1000
+-nThin = 1 #100
++nBurn = 500
++nIter = 500
++nThin = 100
+ nChains=2
+ 
+ pts = 1000
+
+
+
+# then cd into the wiwa-scatr directory and start R.
+
+# first do a run of the MCMC:
 source("R-main/main_WIWA.R")
 
-# then source "generate_rasters_allgen.R" which I thought
-# might be a step toward graphically summarizing the results.
+
+# then source "generate_rasters_allgen.R" 
 source("R-main/generate_rasters_allgen.R")
-Loading required package: gplots
 
-Attaching package: ‘gplots’
 
-The following object is masked from ‘package:stats’:
+# This now runs without any errors or issues.
 
-    lowess
+# Once that is done, we can get the raster layers out:
+load("/tmp/scratch2/WIWA/gen_all_res.Rdata")
 
-/tmp/scratch2/WIWA_1deg_cv_rand_loc 
-Error in (function (classes, fdef, mtable)  : 
-  unable to find an inherited method for function ‘rasterize’ for signature ‘"RasterLayer", "SpatialPolygons"’
-> sessionInfo()
-R version 3.1.2 (2014-10-31)
-Platform: x86_64-pc-linux-gnu (64-bit)
+# and then, for example, plot them.
+png(file="raster_examples.png", width = 1000, height = 1200)
+par(mfrow=c(4,3))
+lapply(1:12, function(x) plot(gen_all[[1]][[x]][[1]], main = paste("bird", x)))
+dev.off()
 
-locale:
- [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
- [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
- [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
- [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+# the resulting plot can be seen in ./raster_examples.png in this repo
 ```
 
-So, that fails, and it seems to be something within the raster package probably not finding
-a method to dispatch on the signature as listed above.
 
+So, that is great.  And I think I could figure out how to do the cross-validation from the
+scripts that Colin provided as well.  But all of that is just using genetic data alone.
+We want to use isotope data as well. I can't find any good reproducible example of making
+isoscapes, etc.
 
